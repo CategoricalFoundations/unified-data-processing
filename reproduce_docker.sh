@@ -1,87 +1,85 @@
 #!/bin/bash
+# =============================================================================
+# reproduce_docker.sh - Reproduction Script for Artifact Evaluators
 #
-# reproduce_docker.sh - Build and run PODS 2026 artifact in Docker
+# PODS 2026 Submission - Category-Theoretic Foundations
+# =============================================================================
 #
-# This script provides one-command reproducibility for reviewers.
+# This script provides commands to build and run the artifact in Docker.
+# It ensures complete reproducibility of all verification results.
 #
-# Usage:
-#   ./reproduce_docker.sh          # Build and run full verification
-#   ./reproduce_docker.sh --build  # Only build the image
-#   ./reproduce_docker.sh --shell  # Build and open interactive shell
+# Prerequisites:
+#   - Docker installed and running
+#   - ~8GB disk space for container
+#   - ~4GB RAM recommended
 #
+# =============================================================================
 
 set -e
 
 IMAGE_NAME="pods2026-artifact"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONTAINER_NAME="pods2026-verification"
 
-echo "========================================"
-echo "PODS 2026 Artifact - Docker Reproduction"
-echo "========================================"
+echo "============================================================"
+echo "PODS 2026 Artifact Reproduction"
+echo "Category-Theoretic Foundations for Unified Data Processing"
+echo "============================================================"
 echo ""
 
-# Parse arguments
-BUILD_ONLY=false
-INTERACTIVE=false
-
-for arg in "$@"; do
-    case $arg in
-        --build)
-            BUILD_ONLY=true
-            ;;
-        --shell)
-            INTERACTIVE=true
-            ;;
-        --help|-h)
-            echo "Usage: $0 [OPTIONS]"
-            echo ""
-            echo "Options:"
-            echo "  --build    Only build the Docker image"
-            echo "  --shell    Open interactive shell in container"
-            echo "  --help     Show this help message"
-            echo ""
-            echo "Default: Build image and run verify_all.sh"
-            exit 0
-            ;;
-    esac
-done
-
-# Check Docker is available
+# Check Docker availability
 if ! command -v docker &> /dev/null; then
-    echo "Error: Docker is not installed or not in PATH"
-    echo "Please install Docker: https://docs.docker.com/get-docker/"
+    echo "ERROR: Docker is not installed or not in PATH."
+    echo ""
+    echo "Please install Docker from: https://docs.docker.com/get-docker/"
     exit 1
 fi
 
-# Build the image
-echo "Building Docker image: ${IMAGE_NAME}"
-echo ""
-docker build -t "${IMAGE_NAME}" "${SCRIPT_DIR}"
-
-if [ "$BUILD_ONLY" = true ]; then
-    echo ""
-    echo "Image built successfully: ${IMAGE_NAME}"
-    echo ""
-    echo "To run verification:"
-    echo "  docker run -it ${IMAGE_NAME} ./scripts/verify_all.sh"
-    exit 0
-fi
-
-echo ""
-echo "========================================"
-echo "Running Verification Suite"
-echo "========================================"
+echo "Docker found: $(docker --version)"
 echo ""
 
-if [ "$INTERACTIVE" = true ]; then
-    # Run with interactive shell
-    docker run -it "${IMAGE_NAME}" bash
-else
-    # Run the full verification
-    docker run -it "${IMAGE_NAME}" ./scripts/verify_all.sh
-fi
+# Parse arguments
+ACTION="${1:-all}"
+
+case "$ACTION" in
+    build)
+        echo "=== Building Docker Image ==="
+        echo ""
+        docker build -t "$IMAGE_NAME" .
+        echo ""
+        echo "Build complete. Run with: $0 run"
+        ;;
+    
+    run)
+        echo "=== Running Verification Suite ==="
+        echo ""
+        docker run --rm --name "$CONTAINER_NAME" "$IMAGE_NAME"
+        ;;
+    
+    interactive)
+        echo "=== Interactive Mode ==="
+        echo ""
+        docker run -it --rm --name "$CONTAINER_NAME" "$IMAGE_NAME" /bin/bash
+        ;;
+    
+    all|*)
+        echo "=== Full Reproduction (Build + Run) ==="
+        echo ""
+        echo "Step 1: Building Docker image..."
+        docker build -t "$IMAGE_NAME" .
+        echo ""
+        echo "Step 2: Running verification suite..."
+        docker run --rm --name "$CONTAINER_NAME" "$IMAGE_NAME"
+        ;;
+esac
 
 echo ""
-echo "========================================"
-echo "Verification Complete"
-echo "========================================"
+echo "============================================================"
+echo "Reproduction Complete"
+echo "============================================================"
+echo ""
+echo "Commands available:"
+echo "  $0 build       - Build the Docker image only"
+echo "  $0 run         - Run the verification suite"
+echo "  $0 interactive - Start interactive shell in container"
+echo "  $0 all         - Build and run (default)"
+echo ""
