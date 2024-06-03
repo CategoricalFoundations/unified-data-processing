@@ -17,17 +17,58 @@ echo "Running TLA+ model checking..."
 echo "Directory: $TLA_DIR"
 echo ""
 
+# TLA+ tools jar location and download URL
+TLA_TOOLS_JAR="$TLA_DIR/tla2tools.jar"
+TLA_TOOLS_URL="https://github.com/tlaplus/tlaplus/releases/download/v1.7.3/tla2tools.jar"
+
+# Auto-download tla2tools.jar if not present
+download_tla_tools() {
+    echo "Downloading TLA+ tools..."
+    local max_retries=3
+    local retry=0
+    
+    while [ $retry -lt $max_retries ]; do
+        if command -v curl &> /dev/null; then
+            if curl -fsSL --retry 3 --retry-delay 2 -o "$TLA_TOOLS_JAR" "$TLA_TOOLS_URL"; then
+                echo "Downloaded tla2tools.jar successfully."
+                return 0
+            fi
+        elif command -v wget &> /dev/null; then
+            if wget -q --tries=3 --waitretry=2 -O "$TLA_TOOLS_JAR" "$TLA_TOOLS_URL"; then
+                echo "Downloaded tla2tools.jar successfully."
+                return 0
+            fi
+        else
+            echo "Error: Neither curl nor wget available for download."
+            exit 1
+        fi
+        
+        retry=$((retry + 1))
+        if [ $retry -lt $max_retries ]; then
+            echo "Download failed, retrying ($retry/$max_retries)..."
+            sleep 2
+        fi
+    done
+    
+    echo "Error: Failed to download tla2tools.jar after $max_retries attempts."
+    exit 1
+}
+
+# Check for tla2tools.jar in current directory or tla/ directory
+if [ ! -f "tla2tools.jar" ] && [ ! -f "$TLA_TOOLS_JAR" ]; then
+    download_tla_tools
+fi
+
 # Determine TLC command
 TLC_CMD=""
 if command -v tlc &> /dev/null; then
     TLC_CMD="tlc"
 elif [ -f "tla2tools.jar" ]; then
     TLC_CMD="java -XX:+UseParallelGC -Xmx8g -jar tla2tools.jar"
+elif [ -f "$TLA_TOOLS_JAR" ]; then
+    TLC_CMD="java -XX:+UseParallelGC -Xmx8g -jar $TLA_TOOLS_JAR"
 else
-    echo "Error: TLC not found."
-    echo "Either:"
-    echo "  1. Install TLA+ Toolbox and ensure 'tlc' is in PATH"
-    echo "  2. Download tla2tools.jar to this directory"
+    echo "Error: TLC not found and auto-download failed."
     exit 1
 fi
 
