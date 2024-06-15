@@ -139,7 +139,7 @@ else
     
     # Build with strict error checking
     echo "Building Lean proofs..."
-    if ! lake build; then
+    if ! lake build -R; then
         echo -e "${RED}✗ Lean build FAILED${NC}"
         echo "Check the errors above."
         exit 1
