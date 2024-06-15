@@ -16,6 +16,8 @@ import Mathlib.CategoryTheory.Limits.Shapes.Kernels
 import Mathlib.CategoryTheory.Limits.Shapes.Biproducts
 import Mathlib.Algebra.Module.Basic
 import Mathlib.Data.Finset.Basic
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Linarith
 
 open CategoryTheory
 
@@ -55,15 +57,15 @@ def add (R S : ZRel α) : ZRel α where
       have hr := (R.support_spec a).mpr.mt h'.1
       have hs := (S.support_spec a).mpr.mt h'.2
       simp only [not_not] at hr hs
-      omega
+      linarith
     · intro h
       cases h with
       | inl hr => 
         have := (R.support_spec a).mp hr
-        omega
+        linarith
       | inr hs =>
         have := (S.support_spec a).mp hs
-        omega
+        linarith
 
 /-- Negation of Z-relation -/
 def neg (R : ZRel α) : ZRel α where
@@ -410,15 +412,15 @@ def diff (R S : ZRel α) : ZRel α where
       have hr := (R.support_spec a).mpr.mt h'.1
       have hs := (S.support_spec a).mpr.mt h'.2
       simp only [not_not] at hr hs
-      omega
+      linarith
     · intro h
       cases h with
       | inl hr => 
         have := (R.support_spec a).mp hr
-        omega
+        linarith
       | inr hs =>
         have := (S.support_spec a).mp hs
-        omega
+        linarith
 
 /-- Theorem 6.7: Z-Kan extension for DIFFERENCE -/
 theorem diff_kan_extension (R S : ZRel α) :

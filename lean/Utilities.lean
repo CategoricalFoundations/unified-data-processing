@@ -14,6 +14,8 @@ import Mathlib.CategoryTheory.Limits.Colimits
 import Mathlib.Algebra.Group.Defs
 import Mathlib.Data.Multiset.Basic
 import Mathlib.Data.List.Basic
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Linarith
 
 open CategoryTheory
 
@@ -131,15 +133,15 @@ def add (R S : ZRelation α) : ZRelation α where
       have hr := (R.support_spec a).mpr.mt h'.1
       have hs := (S.support_spec a).mpr.mt h'.2
       simp at hr hs
-      omega
+      linarith
     · intro h
       cases h with
       | inl hr => 
         have := (R.support_spec a).mp hr
-        omega
+        linarith
       | inr hs =>
         have := (S.support_spec a).mp hs
-        omega
+        linarith
 
 /-- Negation of Z-relation -/
 def neg (R : ZRelation α) : ZRelation α where

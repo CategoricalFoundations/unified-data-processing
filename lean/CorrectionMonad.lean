@@ -12,6 +12,8 @@ import Mathlib.CategoryTheory.Category.Basic
 import Mathlib.CategoryTheory.Monad.Basic
 import Mathlib.CategoryTheory.Monad.Kleisli
 import Mathlib.Algebra.Group.Defs
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Linarith
 
 open CategoryTheory
 
