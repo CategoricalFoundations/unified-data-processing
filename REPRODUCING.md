@@ -14,10 +14,22 @@ This document provides complete instructions for reproducing all verification re
 
 ---
 
-## 1. Docker-based Reproduction
+## Option 0: Docker Reproduction (Recommended)
+
+> [!IMPORTANT]
+> **For reviewers**: This is the recommended method for artifact evaluation. It provides a fully containerized environment with all dependencies pre-configured, ensuring consistent results across different machines.
+
+```bash
+# One-command reproduction
+chmod +x reproduce_docker.sh && ./reproduce_docker.sh
+```
+
+---
+
+## 1. Docker-based Reproduction (Details)
 
 > [!TIP]
-> **For reviewers**: This is the recommended method. It provides a fully containerized environment with all dependencies pre-configured.
+> If the one-liner above works, you're done! The sections below provide additional Docker options and manual installation instructions.
 
 ### 1.1 Prerequisites
 
@@ -398,7 +410,12 @@ Theorem 5.6 empirically verified: ✓
 ✓ G_SB (Stream→Batch): Complexity validated O(n)
 ✓ G_GS (Graph→Stream): Complexity validated O(n log n)
 ✓ F_SG (Stream→Graph): Complexity validated O(n log n)
+
+✓ Plot generated: benchmarks/results/complexity_plot.png
 ```
+
+> [!NOTE]
+> The `paradigm_transform_benchmark.py` script now generates a visual complexity plot comparing empirical G_GS runtimes against the theoretical Θ(n log n) bound. The plot is saved to `benchmarks/results/complexity_plot.png`.
 
 **Correction Monad (Theorem 7.4)**:
 ```

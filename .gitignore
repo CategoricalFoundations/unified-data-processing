@@ -1,0 +1,47 @@
+# Lean 4
+/lean/.lake/
+/lean/lake-packages/
+/lean/build/
+*.olean
+
+# TLA+
+*.toolbox/
+*.old
+states/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+ENV/
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.mv
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Temporary
+*.tmp
+*.bak
+
+# Logs
+logs/
+*.log
