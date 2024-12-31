@@ -59,7 +59,7 @@ else
     
     # Build
     echo "Building Lean proofs..."
-    if lake build; then
+    if lake build -R; then
         echo ""
         echo -e "${GREEN}✓ Lean verification complete${NC}"
         LEAN_STATUS="passed"
@@ -107,8 +107,8 @@ else
     
     for spec in ParadigmTransform ZRelations CorrectionProtocol; do
         if [ -f "${spec}.tla" ]; then
-            echo "Checking ${spec}.tla..."
-            if $TLC_CMD "${spec}.tla" -config MC.cfg -workers 4 2>&1 | tail -5; then
+            echo "Checking ${spec}.tla with ${spec}.cfg..."
+            if $TLC_CMD "${spec}.tla" -config "${spec}.cfg" -workers 4 2>&1 | tail -5; then
                 echo -e "${GREEN}  ✓ ${spec} passed${NC}"
             else
                 echo -e "${RED}  ✗ ${spec} failed${NC}"
