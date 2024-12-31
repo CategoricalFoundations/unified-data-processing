@@ -137,21 +137,20 @@ else
     echo "Fetching Mathlib cache..."
     lake exe cache get 2>/dev/null || echo "  (Cache fetch failed, continuing anyway)"
     
-    # Build with forced reconfiguration
+    # Build with strict error checking
     echo "Building Lean proofs..."
-    if lake build -R 2>&1 | tee /tmp/lean_build.log | tail -20; then
-        echo ""
-        echo -e "${GREEN}✓ Lean verification complete${NC}"
-        LEAN_STATUS="passed"
-        
-        # Count remaining axioms
-        SORRY_COUNT=$(grep -r "sorry" *.lean 2>/dev/null | wc -l | tr -d ' ')
-        echo "  Axiomatizations (sorry): $SORRY_COUNT"
-    else
-        echo -e "${RED}✗ Lean build failed${NC}"
-        echo "  See /tmp/lean_build.log for details"
-        LEAN_STATUS="failed"
+    if ! lake build; then
+        echo -e "${RED}✗ Lean build FAILED${NC}"
+        echo "Check the errors above."
+        exit 1
     fi
+    
+    echo -e "${GREEN}✓ Lean verification complete${NC}"
+    LEAN_STATUS="passed"
+    
+    # Count remaining axioms
+    SORRY_COUNT=$(grep -r "sorry" *.lean 2>/dev/null | wc -l | tr -d ' ')
+    echo "  Axiomatizations (sorry): $SORRY_COUNT"
 fi
 
 echo ""
