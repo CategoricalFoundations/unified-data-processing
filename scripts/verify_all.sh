@@ -287,7 +287,7 @@ print_status "Complexity Plot" "$PLOT_STATUS"
 echo ""
 echo "Artifacts generated:"
 echo "  - benchmarks/results/benchmark_output.txt"
-echo "  - benchmarks/results/complexity_plot.png"
+echo "  - Visual Artifact: benchmarks/results/complexity_plot.png"
 
 echo ""
 

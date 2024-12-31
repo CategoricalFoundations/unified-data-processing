@@ -40,8 +40,8 @@ chmod +x reproduce_docker.sh && ./reproduce_docker.sh
 
 ```bash
 # Clone the repository
-git clone https://github.com/anonymous/categorical-data-processing.git
-cd categorical-data-processing
+git clone https://github.com/CategoricalFoundations/unified-data-processing.git
+cd unified-data-processing
 
 # Run complete verification (builds image and runs all tests)
 ./reproduce_docker.sh
@@ -143,8 +143,8 @@ pip install numpy matplotlib pandas tqdm
 ### 2.5 Clone Repository
 
 ```bash
-git clone https://github.com/anonymous/categorical-data-processing.git
-cd categorical-data-processing
+git clone https://github.com/CategoricalFoundations/unified-data-processing.git
+cd unified-data-processing
 ```
 
 ---

@@ -103,8 +103,8 @@ This builds a container with all dependencies (Lean 4, TLA+ tools, Python) and r
 
 ```bash
 # Clone repository
-git clone https://github.com/anonymous/categorical-data-processing.git
-cd categorical-data-processing
+git clone https://github.com/CategoricalFoundations/unified-data-processing.git
+cd unified-data-processing
 
 # Run complete verification suite
 ./scripts/verify_all.sh
